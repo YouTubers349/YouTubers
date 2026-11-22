@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -19,12 +18,10 @@ button.active,.search{background:#ff3030}
 .card p{color:#aaa}
 .player{width:100%;aspect-ratio:16/9;margin-top:12px}
 .player iframe{width:100%;height:100%;border:0;border-radius:10px}
-.upload{background:#ff3030}
 .note{color:#aaa;font-size:13px}
 </style>
 </head>
 <body>
-
 <header>▶ YouTubers</header>
 
 <main>
@@ -40,18 +37,11 @@ button.active,.search{background:#ff3030}
 
 <div id="results"></div>
 
-<hr style="border-color:#333;margin:30px 0">
-
-<h2>📤 Мои видео</h2>
-<button class="upload" onclick="document.getElementById('file').click()">＋ Загрузить видео</button>
-<input id="file" type="file" accept="video/*" hidden>
-<div id="myVideos"></div>
-
 <p class="note">YouTubers — твоя видеоплатформа ❤️</p>
 </main>
 
 <script>
-const API_KEY = "AIzaSyAVIs_BJczGikz4y9feC5S6lZblSfX1jeo";
+const SERVER = "https://youtubers-server.onvoroa.com";
 let type = "video";
 
 function setType(newType){
@@ -69,24 +59,17 @@ async function searchYouTube(){
     return;
   }
 
-  if(API_KEY === "ТВОЙ_API_KEY"){
-    results.textContent = "Сначала подключи API Key.";
-    return;
-  }
-
   results.textContent = "Ищем... 🔎";
 
   try{
-    const url = "https://www.googleapis.com/youtube/v3/search?part=snippet&q="
-      + encodeURIComponent(query)
-      + "&type=" + type
-      + "&maxResults=15&key=" + encodeURIComponent(API_KEY);
+    const url = SERVER + "/api/search?q=" +
+      encodeURIComponent(query) + "&type=" + type;
 
     const response = await fetch(url);
     const data = await response.json();
 
     if(!response.ok){
-      throw new Error(data.error?.message || "Ошибка поиска");
+      throw new Error(data.error || "Ошибка поиска");
     }
 
     results.innerHTML = "";
@@ -99,6 +82,7 @@ async function searchYouTube(){
     data.items.forEach(item=>{
       const s = item.snippet;
       const id = type==="video" ? item.id.videoId : item.id.channelId;
+
       const card = document.createElement("div");
       card.className = "card";
 
@@ -122,11 +106,13 @@ async function searchYouTube(){
 
         button.onclick = ()=>{
           playerBox.className = "player";
+
           const iframe = document.createElement("iframe");
           iframe.src = "https://www.youtube.com/embed/" + encodeURIComponent(id);
           iframe.title = s.title;
           iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
           iframe.allowFullscreen = true;
+
           playerBox.replaceChildren(iframe);
           button.textContent = "Видео открыто ❤️";
         };
@@ -153,28 +139,7 @@ async function searchYouTube(){
 document.getElementById("query").addEventListener("keydown",e=>{
   if(e.key==="Enter") searchYouTube();
 });
-
-document.getElementById("file").addEventListener("change",function(){
-  const file = this.files[0];
-  if(!file)return;
-
-  const url = URL.createObjectURL(file);
-  const card = document.createElement("div");
-  card.className = "card";
-
-  const title = document.createElement("h3");
-  title.textContent = file.name;
-
-  const video = document.createElement("video");
-  video.src = url;
-  video.controls = true;
-  video.style.width = "100%";
-
-  card.append(title,video);
-  document.getElementById("myVideos").prepend(card);
-});
 </script>
 
 </body>
 </html>
-```
