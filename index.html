@@ -4,86 +4,221 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>YouTubers</title>
+
 <style>
-*{box-sizing:border-box}
-body{margin:0;background:#0f0f0f;color:white;font-family:Arial,sans-serif}
-header{background:#181818;padding:20px;font-size:28px;font-weight:bold;color:#ff3030}
-main{padding:18px;max-width:850px;margin:auto}
-input{width:100%;padding:15px;border-radius:25px;border:1px solid #444;background:#222;color:white;margin:12px 0;font-size:16px}
-button{border:0;padding:13px 18px;border-radius:22px;background:#333;color:white;cursor:pointer;margin:4px}
-button.active,.search{background:#ff3030}
-.search{width:100%;font-weight:bold;font-size:16px}
-.card{background:#1c1c1c;border-radius:14px;padding:15px;margin:18px 0}
-.card img{width:100%;border-radius:10px}
-.card p{color:#aaa}
-.player{width:100%;aspect-ratio:16/9;margin-top:12px}
-.player iframe{width:100%;height:100%;border:0;border-radius:10px}
-.note{color:#aaa;font-size:13px}
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #0f0f0f;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+header {
+  background: #181818;
+  padding: 20px;
+  font-size: 28px;
+  font-weight: bold;
+  color: #ff3030;
+}
+
+main {
+  padding: 18px;
+  max-width: 850px;
+  margin: auto;
+}
+
+input {
+  width: 100%;
+  padding: 15px;
+  border-radius: 25px;
+  border: 1px solid #444;
+  background: #222;
+  color: white;
+  margin: 12px 0;
+  font-size: 16px;
+}
+
+button {
+  border: 0;
+  padding: 13px 18px;
+  border-radius: 22px;
+  background: #333;
+  color: white;
+  cursor: pointer;
+  margin: 4px;
+}
+
+button.active,
+.search {
+  background: #ff3030;
+}
+
+.search {
+  width: 100%;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.vpn-button {
+  width: 100%;
+  background: #168c50;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 15px;
+  margin: 10px 0 20px;
+}
+
+.card {
+  background: #1c1c1c;
+  border-radius: 14px;
+  padding: 15px;
+  margin: 18px 0;
+}
+
+.card img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.card p {
+  color: #aaa;
+}
+
+.player {
+  width: 100%;
+  aspect-ratio: 16/9;
+  margin-top: 12px;
+}
+
+.player iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  border-radius: 10px;
+}
+
+.note {
+  color: #aaa;
+  font-size: 13px;
+}
 </style>
 </head>
+
 <body>
+
 <header>▶ YouTubers</header>
 
 <main>
+
+<button class="vpn-button" onclick="openVPN()">
+🌐 Открыть S VPN
+</button>
+
 <h2>🔎 Поиск YouTubers</h2>
 
 <input id="query" placeholder="Что хочешь найти?">
-<button class="search" onclick="searchYouTube()">Найти 🔎</button>
+
+<button class="search" onclick="searchYouTube()">
+Найти 🔎
+</button>
 
 <div>
-<button id="videoBtn" class="active" onclick="setType('video')">🎬 Видео</button>
-<button id="channelBtn" onclick="setType('channel')">👤 Каналы</button>
+  <button id="videoBtn" class="active"
+  onclick="setType('video')">🎬 Видео</button>
+
+  <button id="channelBtn"
+  onclick="setType('channel')">👤 Каналы</button>
 </div>
 
 <div id="results"></div>
 
-<p class="note">YouTubers — твоя видеоплатформа ❤️</p>
+<p class="note">
+YouTubers — твоя видеоплатформа ❤️
+</p>
+
 </main>
 
 <script>
+
 const SERVER = "https://youtubers-server.onvoroa.com";
+
 let type = "video";
 
-function setType(newType){
-  type = newType;
-  document.getElementById("videoBtn").classList.toggle("active",type==="video");
-  document.getElementById("channelBtn").classList.toggle("active",type==="channel");
+// Открытие S VPN
+function openVPN() {
+
+  window.location.href =
+    "intent://#Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;package=io.deveem.vpn;S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dio.deveem.vpn;end";
+
 }
 
-async function searchYouTube(){
+// Выбор видео или каналов
+function setType(newType) {
+
+  type = newType;
+
+  document.getElementById("videoBtn")
+    .classList.toggle("active", type === "video");
+
+  document.getElementById("channelBtn")
+    .classList.toggle("active", type === "channel");
+
+}
+
+// Поиск YouTube
+async function searchYouTube() {
+
   const query = document.getElementById("query").value.trim();
+
   const results = document.getElementById("results");
 
-  if(!query){
+  if (!query) {
     results.textContent = "Напиши, что хочешь найти!";
     return;
   }
 
   results.textContent = "Ищем... 🔎";
 
-  try{
-    const url = SERVER + "/api/search?q=" +
-      encodeURIComponent(query) + "&type=" + type;
+  try {
+
+    const url =
+      SERVER + "/api/search?q=" +
+      encodeURIComponent(query) +
+      "&type=" + type;
 
     const response = await fetch(url);
+
     const data = await response.json();
 
-    if(!response.ok){
-      throw new Error(data.error || "Ошибка поиска");
+    if (!response.ok) {
+      throw new Error(
+        typeof data.error === "string"
+          ? data.error
+          : "Ошибка поиска"
+      );
     }
 
     results.innerHTML = "";
 
-    if(!data.items || data.items.length===0){
+    if (!data.items || data.items.length === 0) {
       results.textContent = "Ничего не найдено 😢";
       return;
     }
 
-    data.items.forEach(item=>{
+    data.items.forEach(item => {
+
       const s = item.snippet;
-      const id = type==="video" ? item.id.videoId : item.id.channelId;
+
+      const id = type === "video"
+        ? item.id.videoId
+        : item.id.channelId;
 
       const card = document.createElement("div");
+
       card.className = "card";
 
       const title = document.createElement("h3");
@@ -92,53 +227,91 @@ async function searchYouTube(){
       const author = document.createElement("p");
       author.textContent = s.channelTitle;
 
-      card.append(title,author);
+      card.append(title, author);
 
-      if(type==="video"){
+      if (type === "video") {
+
         const img = document.createElement("img");
-        img.src = s.thumbnails.high?.url || s.thumbnails.default.url;
+
+        img.src =
+          s.thumbnails.high?.url ||
+          s.thumbnails.default.url;
 
         const button = document.createElement("button");
+
         button.className = "search";
+
         button.textContent = "▶ Смотреть на YouTubers";
 
         const playerBox = document.createElement("div");
 
-        button.onclick = ()=>{
+        button.onclick = () => {
+
           playerBox.className = "player";
 
           const iframe = document.createElement("iframe");
-          iframe.src = "https://www.youtube.com/embed/" + encodeURIComponent(id);
+
+          iframe.src =
+            "https://www.youtube.com/embed/" +
+            encodeURIComponent(id);
+
           iframe.title = s.title;
-          iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+
+          iframe.allow =
+            "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+
           iframe.allowFullscreen = true;
 
           playerBox.replaceChildren(iframe);
+
           button.textContent = "Видео открыто ❤️";
+
         };
 
-        card.append(img,button,playerBox);
-      }else{
+        card.append(img, button, playerBox);
+
+      } else {
+
         const link = document.createElement("a");
-        link.href = "https://www.youtube.com/channel/" + encodeURIComponent(id);
+
+        link.href =
+          "https://www.youtube.com/channel/" +
+          encodeURIComponent(id);
+
         link.textContent = "Открыть канал";
+
         link.style.color = "#ff5555";
+
         link.target = "_blank";
+
         link.rel = "noopener";
+
         card.append(link);
+
       }
 
       results.appendChild(card);
+
     });
 
-  }catch(error){
+  } catch (error) {
+
     results.textContent = "Ошибка: " + error.message;
+
   }
+
 }
 
-document.getElementById("query").addEventListener("keydown",e=>{
-  if(e.key==="Enter") searchYouTube();
+// Поиск по Enter
+document.getElementById("query")
+.addEventListener("keydown", e => {
+
+  if (e.key === "Enter") {
+    searchYouTube();
+  }
+
 });
+
 </script>
 
 </body>
