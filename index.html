@@ -10,155 +10,312 @@
   box-sizing: border-box;
 }
 
+:root {
+  --purple: #a855f7;
+  --blue: #38bdf8;
+  --bg: #080811;
+}
+
 body {
   margin: 0;
-  background: #0f0f0f;
+  background:
+    radial-gradient(ellipse at 15% 0%, #32105a55, transparent 45%),
+    radial-gradient(ellipse at 90% 25%, #063b5b44, transparent 40%),
+    var(--bg);
   color: white;
   font-family: Arial, sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 
 header {
-  background: #181818;
-  padding: 20px;
-  font-size: 28px;
-  font-weight: bold;
-  color: #ff3030;
+  padding: 22px 18px;
+  font-size: 27px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  background: #10101dcc;
+  border-bottom: 1px solid #a855f744;
+  color: white;
+  text-shadow: 0 0 15px var(--purple);
+  position: relative;
+  z-index: 2;
+}
+
+.logo {
+  background: linear-gradient(90deg, #c084fc, #38bdf8);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
 }
 
 main {
-  padding: 18px;
   max-width: 850px;
   margin: auto;
+  padding: 22px 16px 50px;
+}
+
+h2 {
+  font-size: 23px;
+  margin: 12px 0 20px;
+}
+
+.welcome {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #080811;
+  animation: welcomeOut 1s ease 2.1s forwards;
+  pointer-events: none;
+}
+
+.welcome span {
+  font-size: clamp(25px, 7vw, 42px);
+  font-weight: 900;
+  text-align: center;
+  padding: 20px;
+  background: linear-gradient(90deg, #c084fc, #38bdf8);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: welcomeIn 1s ease both;
+}
+
+@keyframes welcomeIn {
+  from {
+    opacity: 0;
+    transform: translateY(25px) scale(.8);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes welcomeOut {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+.intro {
+  opacity: 0;
+  animation: appear .8s ease 2.5s forwards;
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.search-box {
+  padding: 3px;
+  border-radius: 19px;
+  background: linear-gradient(110deg, #a855f7, #38bdf8);
+  transition: transform .25s ease, filter .25s ease;
+  margin: 18px 0 12px;
+}
+
+.search-box:focus-within {
+  transform: translateY(-5px) scale(1.015);
+  filter: drop-shadow(0 0 12px #a855f788);
 }
 
 input {
   width: 100%;
-  padding: 15px;
-  border-radius: 25px;
-  border: 1px solid #444;
-  background: #222;
+  padding: 17px;
+  border: 0;
+  outline: none;
+  border-radius: 16px;
+  background: #11111f;
   color: white;
-  margin: 12px 0;
   font-size: 16px;
+}
+
+input::placeholder {
+  color: #9292a9;
 }
 
 button {
-  border: 0;
-  padding: 13px 18px;
-  border-radius: 22px;
-  background: #333;
+  border: 1px solid #a855f766;
+  padding: 13px 19px;
+  border-radius: 15px;
+  background: #171528;
   color: white;
   cursor: pointer;
-  margin: 4px;
+  font-size: 15px;
+  margin: 5px 4px 5px 0;
+  transition: transform .2s ease, box-shadow .2s ease,
+              background .2s ease;
 }
 
-button.active,
-.search {
-  background: #ff3030;
+button:active {
+  transform: translateY(-4px) scale(1.03);
+  box-shadow: 0 0 18px #a855f799;
 }
 
 .search {
   width: 100%;
+  padding: 16px;
   font-weight: bold;
-  font-size: 16px;
+  font-size: 17px;
+  background: linear-gradient(100deg, #9333ea, #0284c7);
+  border: none;
+  box-shadow: 0 0 15px #9333ea55;
 }
 
-.vpn-button {
-  width: 100%;
-  background: #168c50;
-  font-size: 16px;
-  font-weight: bold;
-  padding: 15px;
-  margin: 10px 0 20px;
+.tabs {
+  display: flex;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.tabs button {
+  flex: 1;
+  padding: 15px 8px;
+}
+
+button.active {
+  background: linear-gradient(100deg, #9333ea, #0284c7);
+  border-color: transparent;
+  box-shadow: 0 0 15px #9333ea66;
 }
 
 .card {
-  background: #1c1c1c;
-  border-radius: 14px;
+  background: linear-gradient(145deg, #191629, #101522);
+  border: 1px solid #8b5cf644;
+  border-radius: 19px;
   padding: 15px;
   margin: 18px 0;
+  animation: cardIn .55s ease both;
+  box-shadow: 0 8px 25px #0005;
+}
+
+@keyframes cardIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .card img {
   width: 100%;
-  border-radius: 10px;
+  border-radius: 13px;
+  display: block;
+  margin: 12px 0;
+}
+
+.card h3 {
+  line-height: 1.4;
 }
 
 .card p {
-  color: #aaa;
+  color: #aaa9c4;
 }
 
 .player {
   width: 100%;
-  aspect-ratio: 16/9;
-  margin-top: 12px;
+  aspect-ratio: 16 / 9;
+  margin-top: 14px;
+  animation: appear .4s ease;
 }
 
 .player iframe {
   width: 100%;
   height: 100%;
-  border: 0;
-  border-radius: 10px;
+  border: 1px solid #a855f766;
+  border-radius: 13px;
+}
+
+.channel-link {
+  color: #67cfff;
+  text-decoration: none;
+  display: inline-block;
+  padding: 10px 0;
 }
 
 .note {
-  color: #aaa;
-  font-size: 13px;
+  color: #8888a5;
+  text-align: center;
+  margin-top: 35px;
+}
+
+#status {
+  color: #c4b5fd;
+  margin: 15px 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<header>▶ YouTubers</header>
-
-<main>
-
-<button class="vpn-button" onclick="openVPN()">
-🌐 Открыть S VPN
-</button>
-
-<h2>🔎 Поиск YouTubers</h2>
-
-<input id="query" placeholder="Что хочешь найти?">
-
-<button class="search" onclick="searchYouTube()">
-Найти 🔎
-</button>
-
-<div>
-  <button id="videoBtn" class="active"
-  onclick="setType('video')">🎬 Видео</button>
-
-  <button id="channelBtn"
-  onclick="setType('channel')">👤 Каналы</button>
+<div class="welcome">
+  <span>Приветствуем в YouTubers 💜</span>
 </div>
 
-<div id="results"></div>
+<header>
+  <span class="logo">▶ YouTubers</span>
+</header>
 
-<p class="note">
-YouTubers — твоя видеоплатформа ❤️
-</p>
+<main>
+  <section class="intro">
 
+    <h2>✨ Открой мир видео</h2>
+
+    <div class="search-box">
+      <input
+        id="query"
+        placeholder="🔎 Что хочешь найти?"
+        autocomplete="off">
+    </div>
+
+    <button class="search" id="searchBtn">
+      Найти 🔎
+    </button>
+
+    <div class="tabs">
+      <button id="videoBtn" class="active">🎬 Видео</button>
+      <button id="channelBtn">👤 Каналы</button>
+    </div>
+
+    <div id="status" aria-live="polite"></div>
+    <div id="results"></div>
+
+    <p class="note">YouTubers — твой мир видео 💜</p>
+
+  </section>
 </main>
 
 <script>
-
-const SERVER = "https://youtubers-server.onvoroa.com";
+const API = "https://youtubers-server.onvoroa.com/api/search";
 
 let type = "video";
 
-// Открытие S VPN
-function openVPN() {
+const query = document.getElementById("query");
+const results = document.getElementById("results");
+const status = document.getElementById("status");
 
-  window.location.href =
-    "intent://#Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;package=io.deveem.vpn;S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dio.deveem.vpn;end";
-
-}
-
-// Выбор видео или каналов
 function setType(newType) {
-
   type = newType;
 
   document.getElementById("videoBtn")
@@ -167,151 +324,127 @@ function setType(newType) {
   document.getElementById("channelBtn")
     .classList.toggle("active", type === "channel");
 
+  results.innerHTML = "";
+  status.textContent = "";
 }
 
-// Поиск YouTube
+document.getElementById("videoBtn").addEventListener(
+  "click", () => setType("video")
+);
+
+document.getElementById("channelBtn").addEventListener(
+  "click", () => setType("channel")
+);
+
+document.getElementById("searchBtn").addEventListener(
+  "click", searchYouTube
+);
+
+query.addEventListener("keydown", event => {
+  if (event.key === "Enter") searchYouTube();
+});
+
 async function searchYouTube() {
+  const value = query.value.trim();
 
-  const query = document.getElementById("query").value.trim();
-
-  const results = document.getElementById("results");
-
-  if (!query) {
-    results.textContent = "Напиши, что хочешь найти!";
+  if (!value) {
+    status.textContent = "Напиши, что хочешь найти 💜";
     return;
   }
 
-  results.textContent = "Ищем... 🔎";
+  results.innerHTML = "";
+  status.textContent = "Ищем видео... 🔎";
 
   try {
-
-    const url =
-      SERVER + "/api/search?q=" +
-      encodeURIComponent(query) +
+    const url = API +
+      "?q=" + encodeURIComponent(value) +
       "&type=" + type;
 
     const response = await fetch(url);
-
     const data = await response.json();
 
     if (!response.ok) {
-      throw new Error(
-        typeof data.error === "string"
-          ? data.error
-          : "Ошибка поиска"
-      );
+      throw new Error(data.error || "Ошибка поиска");
     }
 
-    results.innerHTML = "";
-
     if (!data.items || data.items.length === 0) {
-      results.textContent = "Ничего не найдено 😢";
+      status.textContent = "Ничего не найдено 😢";
       return;
     }
 
-    data.items.forEach(item => {
+    status.textContent = "Найдено: " + data.items.length;
 
-      const s = item.snippet;
-
+    data.items.forEach((item, index) => {
+      const snippet = item.snippet;
       const id = type === "video"
         ? item.id.videoId
         : item.id.channelId;
 
       const card = document.createElement("div");
-
       card.className = "card";
+      card.style.animationDelay = (index * 0.06) + "s";
 
       const title = document.createElement("h3");
-      title.textContent = s.title;
+      title.textContent = snippet.title;
 
       const author = document.createElement("p");
-      author.textContent = s.channelTitle;
+      author.textContent = snippet.channelTitle;
 
       card.append(title, author);
 
       if (type === "video") {
-
         const img = document.createElement("img");
-
-        img.src =
-          s.thumbnails.high?.url ||
-          s.thumbnails.default.url;
+        img.src = snippet.thumbnails.high?.url ||
+                  snippet.thumbnails.default.url;
+        img.alt = snippet.title;
+        img.loading = "lazy";
 
         const button = document.createElement("button");
-
         button.className = "search";
-
         button.textContent = "▶ Смотреть на YouTubers";
 
         const playerBox = document.createElement("div");
 
-        button.onclick = () => {
-
+        button.addEventListener("click", () => {
           playerBox.className = "player";
 
           const iframe = document.createElement("iframe");
-
           iframe.src =
             "https://www.youtube.com/embed/" +
             encodeURIComponent(id);
 
-          iframe.title = s.title;
-
+          iframe.title = snippet.title;
           iframe.allow =
-            "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
-
+            "accelerometer; autoplay; clipboard-write; " +
+            "encrypted-media; gyroscope; picture-in-picture; web-share";
           iframe.allowFullscreen = true;
 
           playerBox.replaceChildren(iframe);
-
-          button.textContent = "Видео открыто ❤️";
-
-        };
+          button.textContent = "Видео открыто 💜";
+        });
 
         card.append(img, button, playerBox);
 
       } else {
-
         const link = document.createElement("a");
-
+        link.className = "channel-link";
         link.href =
           "https://www.youtube.com/channel/" +
           encodeURIComponent(id);
-
-        link.textContent = "Открыть канал";
-
-        link.style.color = "#ff5555";
-
         link.target = "_blank";
-
         link.rel = "noopener";
+        link.textContent = "Открыть канал →";
 
         card.append(link);
-
       }
 
       results.appendChild(card);
-
     });
 
   } catch (error) {
-
-    results.textContent = "Ошибка: " + error.message;
-
+    status.textContent = "Ошибка: " + error.message;
   }
-
 }
-
-// Поиск по Enter
-document.getElementById("query")
-.addEventListener("keydown", e => {
-
-  if (e.key === "Enter") {
-    searchYouTube();
-  }
-
-});
-
 </script>
 
 </body>
