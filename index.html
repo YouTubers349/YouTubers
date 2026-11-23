@@ -18,34 +18,45 @@
 
 body {
   margin: 0;
+  min-height: 100vh;
   background:
     radial-gradient(ellipse at 15% 0%, #32105a55, transparent 45%),
     radial-gradient(ellipse at 90% 25%, #063b5b44, transparent 40%),
     var(--bg);
   color: white;
   font-family: Arial, sans-serif;
-  min-height: 100vh;
   overflow-x: hidden;
 }
 
 header {
   padding: 22px 18px;
-  font-size: 27px;
-  font-weight: 900;
-  letter-spacing: 1px;
-  background: #10101dcc;
+  background: #10101ddd;
   border-bottom: 1px solid #a855f744;
-  color: white;
-  text-shadow: 0 0 15px var(--purple);
   position: relative;
   z-index: 2;
 }
 
 .logo {
+  display: inline-block;
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: 1px;
   background: linear-gradient(90deg, #c084fc, #38bdf8);
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
+  animation: logoGlow 2.5s ease-in-out infinite alternate;
+}
+
+@keyframes logoGlow {
+  from {
+    filter: drop-shadow(0 0 3px #a855f7);
+    transform: scale(1);
+  }
+  to {
+    filter: drop-shadow(0 0 13px #38bdf8);
+    transform: scale(1.035);
+  }
 }
 
 main {
@@ -198,6 +209,22 @@ button.active {
   margin: 18px 0;
   animation: cardIn .55s ease both;
   box-shadow: 0 8px 25px #0005;
+  transition: transform .25s ease, box-shadow .25s ease,
+              border-color .25s ease;
+}
+
+.card:active {
+  transform: translateY(-5px);
+  border-color: #38bdf8;
+  box-shadow: 0 0 22px #9333ea66;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .card:hover {
+    transform: translateY(-5px);
+    border-color: #38bdf8;
+    box-shadow: 0 0 22px #9333ea66;
+  }
 }
 
 @keyframes cardIn {
@@ -226,11 +253,31 @@ button.active {
   color: #aaa9c4;
 }
 
+.channel-avatar {
+  width: 90px !important;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 50% !important;
+  border: 2px solid #a855f7;
+  box-shadow: 0 0 15px #a855f788;
+}
+
 .player {
   width: 100%;
   aspect-ratio: 16 / 9;
   margin-top: 14px;
-  animation: appear .4s ease;
+  animation: playerIn .45s ease both;
+}
+
+@keyframes playerIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px) scale(.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .player iframe {
@@ -353,7 +400,7 @@ async function searchYouTube() {
   }
 
   results.innerHTML = "";
-  status.textContent = "Ищем видео... 🔎";
+  status.textContent = "Ищем... 🔎";
 
   try {
     const url = API +
@@ -388,7 +435,7 @@ async function searchYouTube() {
       title.textContent = snippet.title;
 
       const author = document.createElement("p");
-      author.textContent = snippet.channelTitle;
+      author.textContent = snippet.channelTitle || "";
 
       card.append(title, author);
 
@@ -426,6 +473,13 @@ async function searchYouTube() {
         card.append(img, button, playerBox);
 
       } else {
+        const img = document.createElement("img");
+        img.className = "channel-avatar";
+        img.src = snippet.thumbnails.high?.url ||
+                  snippet.thumbnails.default?.url || "";
+        img.alt = snippet.title;
+        img.loading = "lazy";
+
         const link = document.createElement("a");
         link.className = "channel-link";
         link.href =
@@ -435,6 +489,7 @@ async function searchYouTube() {
         link.rel = "noopener";
         link.textContent = "Открыть канал →";
 
+        card.insertBefore(img, title);
         card.append(link);
       }
 
